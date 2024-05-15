@@ -1,0 +1,29 @@
+{
+  "name": "c-blog",
+  "version": "1.0.0",
+  "description": "c-blog",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CanberkAkar/C-BLOG.git"
+  },
+  "keywords": [
+    "blog",
+    "nodejs"
+  ],
+  "author": "canberkakar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CanberkAkar/C-BLOG/issues"
+  },
+  "homepage": "https://github.com/CanberkAkar/C-BLOG#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
