@@ -1,13 +1,18 @@
 const express = require('express');
 const ejs = require('ejs');
 const app = express();
-const path= require('path');
-
+const mongoose = require('mongoose');
+const Blog= require('./models/Blog')
 const port = 5050;
 
+mongoose.connect('mongodb://localhost/c-blog')
+    .then(() => console.log('Database connection successful'))
+    .catch(err => console.error('Database connection error:', err));
 
 //TEPMLATE ENGINE
 app.set('view engine',"ejs");
+app.use(express.urlencoded({extended:true}))
+app.use(express.json())
 //MIDDLEWARE
 // const myLogger=(req,res,next)=>{
 //     console.log("middleware log 1");
@@ -25,16 +30,23 @@ app.set('view engine',"ejs");
 app.use(express.static('public'));
 //ROUTES
 
-app.get('/',(request,response)=>{
-    response.render('index')
+app.get('/',async(request,response)=>{
+    const blog= await Blog.find({});
+    response.render('index',{blog})
 });
 app.get('/addpost',(request,response)=>{
+
     response.render('addpost')
 });
 app.get('/post',(request,response)=>{
     response.render('post')
 });
+app.post('/insertBlog',async(request,response)=>{
+    await Blog.create(request.body);
+    response.redirect('/')
+});
 app.get('/about',(request,response)=>{
+
     response.render('about')
 });
 app.listen(port, () => {
