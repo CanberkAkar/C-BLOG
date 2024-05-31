@@ -35,9 +35,13 @@ app.get('/',async(request,response)=>{
     response.render('index',{blog})
 });
 app.get('/addpost',(request,response)=>{
-
     response.render('addpost')
 });
+app.get('/blogPage/:id',async(request,response)=>{
+    console.log(request.params.id);
+    const blog= await Blog.findById(request.params.id);
+    response.render('post',{blog});
+})
 app.get('/post',(request,response)=>{
     response.render('post')
 });
