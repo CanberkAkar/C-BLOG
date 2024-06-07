@@ -28,7 +28,19 @@
   <article>
     <div class="container">
       <div class="row">
-  
+        <div class="col-10">
+          <%=blog.text %>
+        </div>
+        <div class="col-2">
+          <div class="row mb-2">
+            <a  href="/blogPage/editpost/<%=blog._id%>"  class="btn btn-primary" >Update</a>
+          </div>
+          <div class="row">
+            <a  href="/deletePhoto/<%=blog._id%>?_method=DELETE" class="btn btn-danger">Delete</a>
+
+          </div>
+
+        </div>
       </div>
     </div>
   </article>

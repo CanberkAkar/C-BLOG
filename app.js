@@ -2,7 +2,11 @@ const express = require('express');
 const ejs = require('ejs');
 const app = express();
 const mongoose = require('mongoose');
-const Blog= require('./models/Blog')
+const Blog= require('./models/Blog');
+const methodOverride = require('method-override');
+const blogController=require('./controllers/blogControllers');
+const pageController=require('./controllers/pageControllers');
+
 const port = 5050;
 
 mongoose.connect('mongodb://localhost/c-blog')
@@ -10,9 +14,14 @@ mongoose.connect('mongodb://localhost/c-blog')
     .catch(err => console.error('Database connection error:', err));
 
 //TEPMLATE ENGINE
+//middleware: request response döngüsü içerisindeki her şeye denir. her şey bu ikisnini arasında yazılır.
+
 app.set('view engine',"ejs");
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
+app.use(methodOverride('_method', {
+    methods: ['POST', 'GET']
+}));
 //MIDDLEWARE
 // const myLogger=(req,res,next)=>{
 //     console.log("middleware log 1");
@@ -24,35 +33,19 @@ app.use(express.json())
 // }
 //next kullanmamızın sebebi kullanılmadığı taktirde res ve req arasında gidip gelir
 
-//middleware: request response döngüsü içerisindeki her şeye denir. her şey bu ikisnini arasında yazılır.
 
 //statik dosyalarımız için public klasörünü kullan
 app.use(express.static('public'));
-//ROUTES
 
-app.get('/',async(request,response)=>{
-    const blog= await Blog.find({});
-    response.render('index',{blog})
-});
-app.get('/addpost',(request,response)=>{
-    response.render('addpost')
-});
-app.get('/blogPage/:id',async(request,response)=>{
-    console.log(request.params.id);
-    const blog= await Blog.findById(request.params.id);
-    response.render('post',{blog});
-})
-app.get('/post',(request,response)=>{
-    response.render('post')
-});
-app.post('/insertBlog',async(request,response)=>{
-    await Blog.create(request.body);
-    response.redirect('/')
-});
-app.get('/about',(request,response)=>{
+app.get('/',blogController.getBlog);
+app.get('/blogPage/:id',blogController.getBlogValue);
+app.post('/insertBlog',blogController.insertBlog);
+app.put('/updateBlog/:id',blogController.updateBlog);
+app.delete('/deletePhoto/:id',blogController.deleteBlog)
+app.get('/addpost',pageController.addPage);
+app.get('/blogPage/editpost/:id',blogController.editValue)
+app.get('/about',pageController.aboutPage);
 
-    response.render('about')
-});
 app.listen(port, () => {
     console.log(`Sunucu ${port} portunda başlatıldı.`);
 });
